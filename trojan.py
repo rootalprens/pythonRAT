@@ -4,8 +4,8 @@ import time
 import subprocess
 import sys
 import pyautogui
-host="127.0.0.1"
-port=2505
+host="127.0.0.1"  #CHANGE ME
+port=2505        #CHANGE ME
 
 
 
